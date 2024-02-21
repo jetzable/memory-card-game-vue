@@ -7,13 +7,14 @@
       :value="card.value"
       :visible="card.visible"
       :position="card.position"
+      :matched="card.matched"
       @selectCard="flipCard"
       />
   </section>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import Card from './components/Card.vue'
 
 export default {
@@ -23,17 +24,43 @@ export default {
   },
   setup() {
     const cards = Array.from({ length: 40 }, (_, i) => i + 1)
-      .map((value, i) => ({ value, visible: false, position: i}));
+      .map((value, i) => ({ value: i, visible: false, position: i, matched: false }));
     
     const cardList = ref(cards);
+    const userSelectedCards = ref([]);
 
-    const flipCard = ({ position }) => {
-      cardList.value[position].visible = !cardList.value[position].visible
+    const flipCard = (payload) => {
+      if (userSelectedCards.value[0]) {
+        userSelectedCards.value[1] = payload
+      } else {
+        userSelectedCards.value[0] = payload
+      }
+      cardList.value[payload.position].visible = !cardList.value[payload.position].visible
     }
+
+    watch(userSelectedCards, (currentValue) => {
+      const cardOne = currentValue[0];
+      const cardTwo = currentValue[1];
+
+      if (currentValue.length === 2) {
+        if (cardOne.faceValue === cardTwo.faceValue) {
+          cardList.value[cardOne.position].matched = true;
+          cardList.value[cardTwo.position].matched = true;
+          userSelectedCards.value = [];
+        } else {
+          setTimeout(() => {
+            cardList.value[cardOne.position].visible = false
+            cardList.value[cardTwo.position].visible = false
+            userSelectedCards.value = []
+          }, 3000)
+        }
+      }
+    }, { deep: true })
 
     return {
       cardList,
-      flipCard
+      flipCard,
+      userSelectedCards
     }
   }
 }
