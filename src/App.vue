@@ -1,44 +1,28 @@
 <template>
   <h1>Hello World</h1>
   <section class="game-board">
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
+    <Card v-for="(card, index) in cardList" :key="`card-${index}`" :value="card"/>
   </section>
 </template>
 
 <script>
+import Card from './components/Card.vue'
 
 export default {
   name: 'App',
+  components: {
+    Card
+  },
+  setup() {
+    const cardList = Array.from({ length: 40 }, (_, i) => i + 1);
+    return {
+      cardList
+    }
+  }
 }
 </script>
 
 <style>
-
-.card {
-  height: 12rem;
-  background-color: #f0f0f0;
-  border-radius: 12px;
-}
-
 .game-board {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
