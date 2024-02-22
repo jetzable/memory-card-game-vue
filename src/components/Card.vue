@@ -1,11 +1,14 @@
 <template>
-  <div class="card" @click="selectCard">
-    <div v-if="visible" class="card-face is-front">
+  <div class="relative h-64 border-black rounded-lg" @click="selectCard">
+    <div v-if="visible" class="w-full h-full absolute top-0 text-white border-4 border-orange shadow-md rounded-md bg-yellow p-4">
       {{ value }} - {{ matched }}
     </div>
-    <div v-else class="card-face is-back">
-      Back
-    </div>
+    <div
+      v-else
+      class="w-full h-full absolute top-0 text-white border-4
+      border-purple shadow-md rounded-md bg-cover bg-center bg-no-repeat"
+      :style="{backgroundImage: `url(https://images.pexels.com/photos/3255761/pexels-photo-3255761.jpeg?auto=compress&cs=tinysrgb&w=800)`}"
+      />
   </div>
 </template>
 
@@ -45,23 +48,7 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  height: 8rem;
-  border: 5px solid black;
-  position: relative;
-}
 
-.card-face {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-}
-
-.card-face.is-front {
-  background-color: blueviolet;
-  color: white;
-}
 
 .card-face.is-back {
   background-color: black;
