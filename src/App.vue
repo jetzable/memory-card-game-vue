@@ -1,19 +1,21 @@
 <template>
-  <h1>Hello World</h1>
-  <section class="game-board">
-    <Card
-      v-for="(card, index) in cardList"
-      :key="`card-${index}`"
-      :value="card.value"
-      :visible="card.visible"
-      :position="card.position"
-      :matched="card.matched"
-      @selectCard="flipCard"
-      />
-  </section>
-  <p>{{ status }}</p>
-  <button @click="shuffleCards">Start Playing</button>
-  <button @click="restartGame">Restart Game</button>
+  <div class="px-16 py-8 w-full h-screen">
+      <h1 class="text-4xl my-6 text-center">Memory Card Game</h1>
+    <section class="grid grid-cols-5 gap-4">
+      <Card
+        v-for="(card, index) in cardList"
+        :key="`card-${index}`"
+        :value="card.value"
+        :visible="card.visible"
+        :position="card.position"
+        :matched="card.matched"
+        @selectCard="flipCard"
+        />
+    </section>
+    <p>{{ status }}</p>
+    <button @click="shuffleCards" class="">Start Playing</button>
+    <button @click="restartGame">Restart Game</button>
+  </div>
 </template>
 
 <script>
@@ -123,12 +125,12 @@ export default {
   }
 }
 </script>
-
 <style>
-.game-board {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  grid-gap: 1rem;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #f0f0f0;
 }
 </style>
