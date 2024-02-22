@@ -12,9 +12,12 @@
       />
   </section>
   <p>{{ status }}</p>
+  <button @click="shuffleCards">Start Playing</button>
+  <button @click="restartGame">Restart Game</button>
 </template>
 
 <script>
+import _ from 'lodash'
 import { ref, watch, computed } from 'vue'
 import Card from './components/Card.vue'
 
@@ -24,20 +27,64 @@ export default {
     Card
   },
   setup() {
-    const cards = Array.from({ length: 40 }, (_, i) => i + 1)
-      .map((value, i) => ({ value: i, visible: false, position: i, matched: false }));
-    
-    const cardList = ref(cards);
+    const cardList = ref([]);
+    const cardItems = Array.from({ length: 20 }, (_, i) => i + 1);
+
+    cardItems.forEach((item) => {
+      cardList.value.push({
+        value: item,
+        visible: false,
+        matched: false,
+        position: null
+      });
+
+      cardList.value.push({
+        value: item,
+        visible: false,
+        matched: false,
+        position: null
+      });
+    });
+
+    cardList.value = cardList.value.map((card, index) => {
+      return {
+        ...card,
+        position: index
+      }
+    });
+
     const userSelectedCards = ref([]);
-    const remainingPairs = computed(() => cardList.value.filter(card => !card.matched).length / 2);
+    const remainingPairs = computed(() => (cardList.value.filter((card) => !card.matched).length) / 2);
     const status = computed(() => {
       if (remainingPairs.value === 0) {
         return 'You won!'
       }
       return 'Remaining pairs: ' + remainingPairs.value
     })
+
+    const shuffleCards = () => {
+      cardList.value = _.shuffle(cardList.value);
+    }
+
+    const restartGame = () => {
+      shuffleCards();
+
+      cardList.value = cardList.value.map((card, index) => {
+        return {
+          ...card,
+          visible: false,
+          matched: false,
+          position: index
+        }
+      });
+    }
+
     const flipCard = (payload) => {
       if (userSelectedCards.value[0]) {
+        if ((userSelectedCards.value[0].position === payload.position) && (userSelectedCards.value[0].faceValue === payload.faceValue)) {
+          return
+        }
+
         userSelectedCards.value[1] = payload
       } else {
         userSelectedCards.value[0] = payload
@@ -69,7 +116,9 @@ export default {
       flipCard,
       userSelectedCards,
       remainingPairs,
-      status
+      status,
+      shuffleCards,
+      restartGame
     }
   }
 }
