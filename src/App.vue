@@ -13,6 +13,7 @@
   </section>
   <p>{{ status }}</p>
   <button @click="shuffleCards">Start Playing</button>
+  <button @click="restartGame">Restart Game</button>
 </template>
 
 <script>
@@ -27,7 +28,7 @@ export default {
   },
   setup() {
     const cards = Array.from({ length: 40 }, (_, i) => i + 1)
-      .map((value, i) => ({ value: i, visible: true, position: i, matched: false }));
+      .map((value, i) => ({ value: 2, visible: false, position: i, matched: false }));
     
     const cardList = ref(cards);
     const userSelectedCards = ref([]);
@@ -41,6 +42,19 @@ export default {
 
     const shuffleCards = () => {
       cardList.value = _.shuffle(cardList.value);
+    }
+
+    const restartGame = () => {
+      shuffleCards();
+
+      cardList.value = cardList.value.map((card, index) => {
+        return {
+          ...card,
+          visible: false,
+          matched: false,
+          position: index
+        }
+      });
     }
 
     const flipCard = (payload) => {
@@ -77,7 +91,8 @@ export default {
       userSelectedCards,
       remainingPairs,
       status,
-      shuffleCards
+      shuffleCards,
+      restartGame
     }
   }
 }
