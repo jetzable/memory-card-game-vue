@@ -54,7 +54,7 @@ export default {
     });
 
     const userSelectedCards = ref([]);
-    const remainingPairs = computed(() => cardList.value.filter(card => !card.matched).length / 2);
+    const remainingPairs = computed(() => (cardList.value.filter((card) => !card.matched).length) / 2);
     const status = computed(() => {
       if (remainingPairs.value === 0) {
         return 'You won!'
@@ -81,6 +81,10 @@ export default {
 
     const flipCard = (payload) => {
       if (userSelectedCards.value[0]) {
+        if ((userSelectedCards.value[0].position === payload.position) && (userSelectedCards.value[0].faceValue === payload.faceValue)) {
+          return
+        }
+
         userSelectedCards.value[1] = payload
       } else {
         userSelectedCards.value[0] = payload
