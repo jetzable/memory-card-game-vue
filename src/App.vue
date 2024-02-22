@@ -27,10 +27,32 @@ export default {
     Card
   },
   setup() {
-    const cards = Array.from({ length: 40 }, (_, i) => i + 1)
-      .map((value, i) => ({ value: 2, visible: false, position: i, matched: false }));
-    
-    const cardList = ref(cards);
+    const cardList = ref([]);
+    const cardItems = Array.from({ length: 20 }, (_, i) => i + 1);
+
+    cardItems.forEach((item) => {
+      cardList.value.push({
+        value: item,
+        visible: false,
+        matched: false,
+        position: null
+      });
+
+      cardList.value.push({
+        value: item,
+        visible: false,
+        matched: false,
+        position: null
+      });
+    });
+
+    cardList.value = cardList.value.map((card, index) => {
+      return {
+        ...card,
+        position: index
+      }
+    });
+
     const userSelectedCards = ref([]);
     const remainingPairs = computed(() => cardList.value.filter(card => !card.matched).length / 2);
     const status = computed(() => {
