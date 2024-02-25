@@ -1,13 +1,19 @@
 <template>
   <div class="relative h-64 border-black rounded-lg" @click="selectCard">
-    <div v-if="visible" class="w-full h-full absolute top-0 text-white border-4 border-orange shadow-md rounded-md bg-yellow p-4">
-      {{ value }} - {{ matched }}
+    <div
+      v-if="visible"
+      class="w-full h-full absolute top-0 text-white
+      border-4 border-orange shadow-md rounded-md p-4
+      bg-cover bg-center bg-no-repeat"
+      :style="{backgroundColor: matched ? 'green' : 'black', backgroundImage: `url(${cardImage})`}"
+      >
+      <p class="text-xl uppercase text-yellow font-bold text-center absolute top-4 left-4">{{ value }}</p>
     </div>
     <div
       v-else
       class="w-full h-full absolute top-0 text-white border-4
-      border-purple shadow-md rounded-md bg-cover bg-center bg-no-repeat"
-      :style="{backgroundImage: `url(https://images.pexels.com/photos/3255761/pexels-photo-3255761.jpeg?auto=compress&cs=tinysrgb&w=800)`}"
+      shadow-lg border-gray-200 rounded-md bg-cover bg-center bg-no-repeat"
+      :style="{backgroundImage: `url(https://images.pexels.com/photos/1774986/pexels-photo-1774986.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)`}"
       />
   </div>
 </template>
@@ -17,7 +23,11 @@ export default {
   name: 'CardComponent',
   props: {
     value: {
-      type: Number,
+      type: String,
+      required: true
+    },
+    cardImage: {
+      type: String,
       required: true
     },
     visible: {
