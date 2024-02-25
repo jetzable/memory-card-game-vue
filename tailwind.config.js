@@ -152,7 +152,7 @@ module.exports = {
       teal: '#2a9d8f',
       cyan: colors.cyan,
       sky: colors.sky,
-      blue: colors.blue,
+      blue: '#0466c8',
       indigo: colors.indigo,
       violet: colors.violet,
       purple: '#9d4edd',

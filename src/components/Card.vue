@@ -12,8 +12,8 @@
     <div
       v-else
       class="w-full h-full absolute top-0 text-white border-4
-      shadow-lg border-gray-200 rounded-md bg-cover bg-center bg-no-repeat"
-      :style="{backgroundImage: `url(https://images.pexels.com/photos/1774986/pexels-photo-1774986.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)`}"
+      shadow-lg border-gray-200 rounded-lg bg-cover bg-center bg-no-repeat"
+      :style="{backgroundImage: `url(https://images.pexels.com/photos/13398438/pexels-photo-13398438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)`}"
       />
   </div>
 </template>

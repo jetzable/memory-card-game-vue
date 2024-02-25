@@ -3,21 +3,51 @@
     <ModalCard v-if="welcomeCard">
       <form @submit.prevent="startGame" class="flex flex-col">
         <h1 class="text-4xl mb-4 text-center font-bold text-orange">Memory Card Game</h1>
+        <p v-if="playerName && isLogged" class="text-center text-xl">Welcome back, {{ playerName }}!</p>
         <InputComponent
+          v-else
           v-model="playerName"
+          :value="playerName"
           :playerName="playerName"
           :errorMessage="errorMessage"
           @update:playerName="($event) => playerName = $event"
           />
-        <button type="submit" class="self-end mt-4 uppercase font-bold bg-orange text-white p-3 rounded-lg">Start Playing</button>   
+        <button type="submit" class="self-end mt-4 uppercase font-bold bg-blue text-white p-3 rounded-lg">
+          {{ !isLogged ? 'Start Game' : 'Restart Game' }}
+        </button>   
       </form>
+    </ModalCard>
+    <ModalCard v-else-if="goodByeCard">
+      <h1 class="text-4xl mb-4 text-center font-bold text-orange">Memory Card Game</h1>
+      <p class="text-center text-xl">See you next time, {{ playerName }}!</p>
+    </ModalCard>
+    <ModalCard v-else-if="winnerCard">
+      <h1 class="text-4xl mb-4 text-center font-bold text-orange">Memory Card Game</h1>
+      <p class="text-center text-xl">Congratulations, {{ playerName }}!</p>
+      <p class="text-center text-xl">You won!</p>
+      <div class="flex items-center justify-between mt-4">
+        <button
+          class="uppercase font-bold bg-blue text-white p-3 rounded-lg"
+          @click="restartGame"
+          >
+          Restart Game
+        </button>
+        <button
+          class="uppercase font-bold bg-red text-white p-3 rounded-lg"
+          @click="logout"
+          >
+          Log out
+        </button>
+      </div>
     </ModalCard>
     <div v-else>
       <HeroBoard
         :status="status"
         :rightGuesses="rightGuesses"
         :wrongGuesses="wrongGuesses"
+        :playerName="playerName"
         @restart="restartGame"
+        @logout="logout"
         />
       <section class="grid grid-cols-5 gap-4 mt-4">
         <Card
@@ -54,48 +84,18 @@ export default {
   setup() {
     const cardItems = ref([]);
     const cardList = ref([]);
-    const getCards = async () => {
-      try {
-        const response = await fetch('https://fed-team.modyo.cloud/api/content/spaces/animals/types/game/entries?per_page=20');
-        const data = await response.json();
-        cardItems.value = data.entries.map((entry) => {
-          return { 
-            name: entry.fields.image.title,
-            faceValue: entry.fields.image.title,
-            url: entry.fields.image.url,
-            id: entry.fields.image.uuid
-           }
-        });
-        cardItems.value.forEach((item) => {
-          cardList.value.push({
-            ...item,
-            faceValue: item.name,
-            visible: false,
-            matched: false,
-            position: null
-          });
-
-          cardList.value.push({
-            ...item,
-            faceValue: item.name,
-            visible: false,
-            matched: false,
-            position: null
-          });
-        });
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    getCards();
     const rightGuesses = ref(0);
     const wrongGuesses = ref(0);
     const welcomeCard = ref(true);
+    const goodByeCard = ref(false);
     const playerName = ref('');
     const errorMessage = ref(null);
     const userSelectedCards = ref([]);
+    const isLogged = ref(false);
 
     const remainingPairs = computed(() => (cardList.value.filter((card) => !card.matched).length) / 2);
+    const winnerCard = computed(() => remainingPairs.value === 0);
+
     const status = computed(() => {
       if (remainingPairs.value === 0) {
         return {
@@ -120,6 +120,8 @@ export default {
         errorMessage.value = 'Please enter your name to start playing';
         return
       } else {
+        window.localStorage.setItem('playerName', playerName.value);
+        isLogged.value = true;
         shuffleCards();
         cardList.value = cardList.value.map((card, index) => {
           return {
@@ -162,6 +164,58 @@ export default {
       cardList.value[payload.position].visible = !cardList.value[payload.position].visible
     }
 
+    const getCards = async () => {
+      try {
+        const response = await fetch('https://fed-team.modyo.cloud/api/content/spaces/animals/types/game/entries?per_page=20');
+        const data = await response.json();
+        cardItems.value = data.entries.map((entry) => {
+          return { 
+            name: entry.fields.image.title,
+            faceValue: entry.fields.image.title,
+            url: entry.fields.image.url,
+            id: entry.fields.image.uuid
+           }
+        });
+        cardItems.value.forEach((item) => {
+          cardList.value.push({
+            ...item,
+            faceValue: item.name,
+            visible: false,
+            matched: false,
+            position: null
+          });
+
+          cardList.value.push({
+            ...item,
+            faceValue: item.name,
+            visible: false,
+            matched: false,
+            position: null
+          });
+        });
+        if (window.localStorage.getItem('playerName')) {
+          playerName.value = window.localStorage.getItem('playerName');
+          isLogged.value = true;
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const logout = () => {
+      goodByeCard.value = true;
+      setTimeout(() => {
+        window.localStorage.removeItem('playerName');
+        playerName.value = '';
+        isLogged.value = false;
+        welcomeCard.value = true;
+        goodByeCard.value = false;
+      }, 2000)
+    }
+
+    getCards();
+
+
     watch(userSelectedCards, (currentValue) => {
       const cardOne = currentValue[0];
       const cardTwo = currentValue[1];
@@ -196,7 +250,11 @@ export default {
       welcomeCard,
       playerName,
       startGame,
-      errorMessage
+      errorMessage,
+      logout,
+      goodByeCard,
+      isLogged,
+      winnerCard
     }
   }
 }
