@@ -1,5 +1,9 @@
 <template>
-  <div class="relative h-64 border-black rounded-lg" @click="selectCard">
+  <div
+    class="relative h-64 border-black rounded-lg transition-transform duration-500 ease-in"
+    :style="flippedStyles"
+    @click="selectCard"
+    >
     <div
       v-if="visible"
       class="w-full h-full absolute top-0 text-white
@@ -7,7 +11,6 @@
       bg-cover bg-center bg-no-repeat"
       :style="{backgroundColor: matched ? 'green' : 'black', backgroundImage: `url(${cardImage})`}"
       >
-      <p class="text-xl uppercase text-yellow font-bold text-center absolute top-4 left-4">{{ value }}</p>
     </div>
     <div
       v-else
@@ -19,6 +22,8 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+
 export default {
   name: 'CardComponent',
   props: {
@@ -44,6 +49,15 @@ export default {
     }
   },
   setup(props, { emit }) {
+    const flippedStyles = computed(() => {
+      if (props.visible) {
+        return {
+          transform: 'rotateY(180deg)'
+        }
+      } else {
+        return 'not-flipped'
+      }
+    })
     const selectCard = () => {
       emit('select-card', {
         faceValue: props.value,
@@ -51,7 +65,8 @@ export default {
       })
     }
     return {
-      selectCard
+      selectCard,
+      flippedStyles
     }
   }
 }
