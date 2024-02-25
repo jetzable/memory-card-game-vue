@@ -92,10 +92,10 @@ export default {
     const errorMessage = ref(null);
     const userSelectedCards = ref([]);
     const isLogged = ref(false);
-
+    
+    // Computed properties
     const remainingPairs = computed(() => (cardList.value.filter((card) => !card.matched).length) / 2);
     const winnerCard = computed(() => remainingPairs.value === 0);
-
     const status = computed(() => {
       if (remainingPairs.value === 0) {
         return {
@@ -109,12 +109,16 @@ export default {
       }
     })
 
+    // Methods
+
+    // Shuffle cards
     const shuffleCards = () => {
       wrongGuesses.value = 0;
       rightGuesses.value = 0;
       cardList.value = _.shuffle(cardList.value);
     }
 
+    // Start game: set player name and shuffle cards
     const startGame = () => {
       if (playerName.value === '') {
         errorMessage.value = 'Please enter your name to start playing';
@@ -136,6 +140,7 @@ export default {
       }
     }
 
+    // Restart game: reset right and wrong guesses, shuffle cards and reset card list
     const restartGame = () => {
       rightGuesses.value = 0;
       wrongGuesses.value = 0;
@@ -151,6 +156,7 @@ export default {
       });
     }
 
+    // Flip card: flip card and check if it matches
     const flipCard = (payload) => {
       if (userSelectedCards.value[0]) {
         if ((userSelectedCards.value[0].position === payload.position) && (userSelectedCards.value[0].faceValue === payload.faceValue)) {
@@ -164,6 +170,7 @@ export default {
       cardList.value[payload.position].visible = !cardList.value[payload.position].visible
     }
 
+    // Get cards: fetch cards from API
     const getCards = async () => {
       try {
         const response = await fetch('https://fed-team.modyo.cloud/api/content/spaces/animals/types/game/entries?per_page=20');
@@ -202,6 +209,7 @@ export default {
       }
     }
 
+    // Logout: remove player name from local storage and reset game
     const logout = () => {
       goodByeCard.value = true;
       setTimeout(() => {
@@ -213,9 +221,14 @@ export default {
       }, 2000)
     }
 
+    // Lifecycle hooks
+
+    // Get cards: fetch cards from API
     getCards();
 
+    // Watchers
 
+    // Watch user selected cards: check if cards match
     watch(userSelectedCards, (currentValue) => {
       const cardOne = currentValue[0];
       const cardTwo = currentValue[1];
@@ -227,12 +240,13 @@ export default {
           rightGuesses.value += 1;
           userSelectedCards.value = [];
         } else {
+          // Hide cards after 1.3 seconds
           setTimeout(() => {
             wrongGuesses.value += 1;
             cardList.value[cardOne.position].visible = false
             cardList.value[cardTwo.position].visible = false
             userSelectedCards.value = []
-          }, 1800)
+          }, 1300)
         }
       }
     }, { deep: true })
