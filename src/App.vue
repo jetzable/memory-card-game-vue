@@ -1,5 +1,5 @@
 <template>
-  <div class="px-16 pt-8 pb-16 w-full h-screen overflow-auto">
+  <div class="px-4 md:px-16 pt-4 md:pt-8 pb-16 w-full h-screen overflow-auto">
     <ModalCard v-if="welcomeCard">
       <form @submit.prevent="startGame" class="flex flex-col">
         <h1 class="text-4xl mb-4 text-center font-bold text-orange">Memory Card Game</h1>
@@ -49,7 +49,7 @@
         @restart="restartGame"
         @logout="logout"
         />
-      <section class="grid grid-cols-5 gap-4 mt-4">
+      <section class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 mt-4">
         <Card
           v-for="(card, index) in cardList"
           :key="`${card.id}-${index}`"
