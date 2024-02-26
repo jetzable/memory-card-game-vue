@@ -6,7 +6,8 @@ Welcome to the Memory Card Game! This game is built with Vue.js 3 and styled wit
 
 Check out the live demo [here](https://modyo-memory-card-game.netlify.app/).
 
-[![](https://markdown-videos-api.jorgenkh.no/youtube/{GENh-htPXgU})](https://youtu.be/{GENh-htPXgU})
+[![](https://markdown-videos-api.jorgenkh.no/youtube/GENh-htPXgU)](https://youtu.be/GENh-htPXgU)
+
 
 ## Features
 
