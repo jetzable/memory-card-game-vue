@@ -12,8 +12,10 @@
           :errorMessage="errorMessage"
           @update:playerName="($event) => playerName = $event"
           />
-        <button type="submit" class="self-end p-3 mt-4 font-bold text-white uppercase rounded-lg bg-blue">
-          {{ !isLogged ? 'Start Game' : 'Restart Game' }}
+        <button type="submit" class="flex items-center self-end p-3 mt-4 font-bold text-white uppercase rounded-lg bg-blue">
+          <p>{{ !isLogged ? 'Start Game' : 'Restart Game' }}</p>
+          <fa v-if="isLogged" icon="rotate-left" class="ml-2" />
+          <fa v-else icon="play" class="ml-2" />
         </button>   
       </form>
     </ModalCard>
@@ -30,17 +32,19 @@
           class="p-3 font-bold text-white uppercase rounded-lg bg-blue"
           @click="restartGame"
           >
-          Restart Game
+          <p>Restart Game</p>
+          <fa icon="rotate-left" class="ml-2" />
         </button>
         <button
           class="p-3 font-bold text-white uppercase rounded-lg bg-red"
           @click="logout"
           >
-          Log out
+          <p>Logout</p>
+          <fa icon="arrow-right-from-bracket" class="ml-2" />
         </button>
       </div>
     </ModalCard>
-    <div v-else>
+    <div v-else class="bg-gradient-to-bl from-teal-400 via-neutral-50 to-rose-50">
       <HeroBoard
         :status="status"
         :rightGuesses="rightGuesses"

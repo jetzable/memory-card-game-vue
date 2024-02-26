@@ -17,16 +17,18 @@
       </div>
       <div class="flex flex-col">
         <button
-          class="h-full p-3 mb-2 font-bold text-white uppercase rounded-lg shadow-md bg-yellow"
+          class="flex items-center justify-center h-full p-3 mb-2 font-bold text-white uppercase rounded-lg shadow-md bg-yellow"
           @click="($event) => $emit('restart')"
           >
-          Restart Game
+          <p>Restart Game</p>
+          <fa icon="rotate-left" class="ml-2" />
         </button>
         <button
-          class="h-full p-3 font-bold text-white uppercase rounded-lg shadow-md bg-blue"
+          class="flex items-center justify-between h-full p-3 font-bold text-white uppercase rounded-lg shadow-md bg-blue"
           @click="($event) => $emit('logout')"
           >
-          Log out
+          <p>Log out</p>
+          <fa icon="arrow-right-from-bracket" class="ml-2" />
         </button>
       </div>
     </section>
