@@ -1,7 +1,7 @@
 <template>
   <div class="w-full md:p-4">
-    <h1 class="mt-2 mb-2 text-2xl font-bold text-center font-lato md:text-4xl md:mt-6 text-blue">Memory Card Game</h1>
-    <p class="mb-4 text-lg font-bold text-center md:text-2xl text-orange">{{ playerName }}</p>
+    <h1 class="mt-2 mb-2 text-4xl font-bold text-center font-lato md:text-4xl md:mt-6 text-blue">Memory Card Game</h1>
+    <p class="mb-4 text-2xl font-bold text-center md:text-2xl text-orange">{{ playerName }}</p>
     <section class="grid grid-cols-2 gap-2 md:flex md:items-center md:justify-between">
       <div class="text-lg text-center bg-green text-white flex flex-col shadow-lg md:max-w-[20%] uppercase items-center justify-center p-3 rounded-md">
         <span class="mr-2">Right Guesses</span>

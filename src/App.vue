@@ -86,20 +86,33 @@ export default {
     InputComponent
 },
   setup() {
+    // Refs
+
+    // Card items
     const cardItems = ref([]);
     const cardList = ref([]);
-    const rightGuesses = ref(0);
-    const wrongGuesses = ref(0);
-    const welcomeCard = ref(true);
-    const goodByeCard = ref(false);
+
+    // Game variables
     const playerName = ref('');
     const errorMessage = ref(null);
+    const rightGuesses = ref(0);
+    const wrongGuesses = ref(0);
     const userSelectedCards = ref([]);
+
+    // Game & player status
+    const welcomeCard = ref(true);
+    const goodByeCard = ref(false);
     const isLogged = ref(false);
     
     // Computed properties
+
+    // Remaining pairs
     const remainingPairs = computed(() => (cardList.value.filter((card) => !card.matched).length) / 2);
+
+    // Winner card: check if there are no remaining pairs
     const winnerCard = computed(() => remainingPairs.value === 0);
+
+    // Game status messages
     const status = computed(() => {
       if (remainingPairs.value === 0) {
         return {
@@ -115,7 +128,7 @@ export default {
 
     // Methods
 
-    // Shuffle cards
+    // Shuffle cards: shuffle card list
     const shuffleCards = () => {
       wrongGuesses.value = 0;
       rightGuesses.value = 0;
@@ -177,8 +190,11 @@ export default {
     // Get cards: fetch cards from API
     const getCards = async () => {
       try {
+        // Fetch cards from API
         const response = await fetch('https://fed-team.modyo.cloud/api/content/spaces/animals/types/game/entries?per_page=20');
         const data = await response.json();
+
+        // Map fetched data to card items
         cardItems.value = data.entries.map((entry) => {
           return { 
             name: entry.fields.image.title,
@@ -187,6 +203,8 @@ export default {
             id: entry.fields.image.uuid
            }
         });
+
+        // Create the duplicated list of cards
         cardItems.value.forEach((item) => {
           cardList.value.push({
             ...item,
@@ -204,6 +222,8 @@ export default {
             position: null
           });
         });
+
+        // Store player name in local storage and set isLogged to true
         if (window.localStorage.getItem('playerName')) {
           playerName.value = window.localStorage.getItem('playerName');
           isLogged.value = true;
@@ -237,7 +257,10 @@ export default {
       const cardOne = currentValue[0];
       const cardTwo = currentValue[1];
 
+      // Check if there are two cards selected to compare their face values to see if its a match.
       if (currentValue.length === 2) {
+
+        // If the face values of the two cards are the same, set the matched property to true and reset the user selected cards.
         if (cardOne.faceValue === cardTwo.faceValue) {
           cardList.value[cardOne.position].matched = true;
           cardList.value[cardTwo.position].matched = true;
