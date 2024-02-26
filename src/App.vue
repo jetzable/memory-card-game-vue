@@ -1,9 +1,9 @@
 <template>
-  <div class="px-4 md:px-16 pt-4 md:pt-8 pb-16 w-full h-screen overflow-auto">
+  <div class="w-full h-screen px-4 pt-4 pb-16 overflow-auto font-roboto md:px-16 md:pt-8">
     <ModalCard v-if="welcomeCard">
       <form @submit.prevent="startGame" class="flex flex-col">
-        <h1 class="text-4xl mb-4 text-center font-bold text-orange">Memory Card Game</h1>
-        <p v-if="playerName && isLogged" class="text-center text-xl">Welcome back, {{ playerName }}!</p>
+        <h1 class="mb-4 text-4xl font-bold text-center font-lato text-orange">Memory Card Game</h1>
+        <p v-if="playerName && isLogged" class="text-2xl text-center">Welcome back, {{ playerName }}!</p>
         <InputComponent
           v-else
           v-model="playerName"
@@ -12,28 +12,28 @@
           :errorMessage="errorMessage"
           @update:playerName="($event) => playerName = $event"
           />
-        <button type="submit" class="self-end mt-4 uppercase font-bold bg-blue text-white p-3 rounded-lg">
+        <button type="submit" class="self-end p-3 mt-4 font-bold text-white uppercase rounded-lg bg-blue">
           {{ !isLogged ? 'Start Game' : 'Restart Game' }}
         </button>   
       </form>
     </ModalCard>
     <ModalCard v-else-if="goodByeCard">
-      <h1 class="text-4xl mb-4 text-center font-bold text-orange">Memory Card Game</h1>
-      <p class="text-center text-xl">See you next time, {{ playerName }}!</p>
+      <h1 class="mb-4 text-4xl font-bold text-center font-lato text-orange">Memory Card Game</h1>
+      <p class="text-xl text-center">See you next time, {{ playerName }}!</p>
     </ModalCard>
     <ModalCard v-else-if="winnerCard">
-      <h1 class="text-4xl mb-4 text-center font-bold text-orange">Memory Card Game</h1>
-      <p class="text-center text-xl">Congratulations, {{ playerName }}!</p>
-      <p class="text-center text-xl">You won!</p>
+      <h1 class="mb-4 text-4xl font-bold text-center font-lato text-orange">Memory Card Game</h1>
+      <p class="text-xl text-center">Congratulations, {{ playerName }}!</p>
+      <p class="text-xl text-center">You won!</p>
       <div class="flex items-center justify-between mt-4">
         <button
-          class="uppercase font-bold bg-blue text-white p-3 rounded-lg"
+          class="p-3 font-bold text-white uppercase rounded-lg bg-blue"
           @click="restartGame"
           >
           Restart Game
         </button>
         <button
-          class="uppercase font-bold bg-red text-white p-3 rounded-lg"
+          class="p-3 font-bold text-white uppercase rounded-lg bg-red"
           @click="logout"
           >
           Log out
@@ -49,7 +49,7 @@
         @restart="restartGame"
         @logout="logout"
         />
-      <section class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 mt-4">
+      <section class="grid grid-cols-1 gap-2 mt-4 md:grid-cols-4 lg:grid-cols-5 md:gap-4">
         <Card
           v-for="(card, index) in cardList"
           :key="`${card.id}-${index}`"
@@ -280,4 +280,5 @@ html, body {
   width: 100%;
   background-color: #f0f0f0;
 }
+
 </style>

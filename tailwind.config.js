@@ -142,7 +142,7 @@ module.exports = {
       zinc: colors.zinc,
       neutral: colors.neutral,
       stone: colors.stone,
-      red: '#e76f51',
+      red: '#ff686b',
       orange: '#f4a261',
       amber: colors.amber,
       yellow: '#e9c46a',
@@ -301,6 +301,8 @@ module.exports = {
       DEFAULT: '1',
     },
     fontFamily: {
+      lato: ['Lato', 'sans-serif'],
+      roboto: ['Roboto', 'sans-serif'],
       sans: [
         'ui-sans-serif',
         'system-ui',
